@@ -2,6 +2,8 @@ import type { MetaFunction, LoaderFunctionArgs } from "@vercel/remix";
 import { json } from "@vercel/remix";
 import { useLoaderData } from "@remix-run/react";
 
+import { stringify } from "qs";
+
 export const meta: MetaFunction = () => {
   return [
     { title: "New Remix App" },
@@ -10,15 +12,19 @@ export const meta: MetaFunction = () => {
 };
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  return json({ test: 123 });
+  return json({
+    test: 123,
+    testUrl: stringify({ a: 1, b: 2, c: { d: 3, e: [4, 5] } }),
+  });
 }
 
 export default function Index() {
-  const { test } = useLoaderData<typeof loader>();
+  const { test, testUrl } = useLoaderData<typeof loader>();
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
       <h1>Welcome to Remix</h1>
       <p>{test}</p>
+      <p>{testUrl}</p>
       <ul>
         <li>
           <a
