@@ -11,9 +11,15 @@ export const meta: MetaFunction = () => {
   ];
 };
 
+async function testSlow(): Promise<string> {
+  return new Promise((resolve) => {
+    setTimeout(resolve, 100, "foo");
+  });
+}
+
 export async function loader({ request }: LoaderFunctionArgs) {
   return json({
-    test: 123,
+    test: await testSlow(),
     testUrl: stringify({ a: 1, b: 2, c: { d: 3, e: [4, 5] } }),
   });
 }
