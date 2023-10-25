@@ -11,15 +11,11 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-async function testSlow(): Promise<string> {
-  return new Promise((resolve) => {
-    setTimeout(resolve, 100, "foo");
-  });
-}
-
 export async function loader({ request }: LoaderFunctionArgs) {
+  const res = await fetch("https://jsonplaceholder.typicode.com/todos/1");
+  const test = await res.json();
   return json({
-    test: await testSlow(),
+    test,
     testUrl: stringify({ a: 1, b: 2, c: { d: 3, e: [4, 5] } }),
   });
 }
